@@ -1,6 +1,7 @@
 ﻿#include "DirectedGraph.h"
 #include <cstring>
-
+#include <iostream>
+using namespace std;
 DirectedGraph::DirectedGraph(int n)
 {
 	MakeEmptyGraph(n);
@@ -15,6 +16,12 @@ DirectedGraph::~DirectedGraph()
 	delete[] _AdjacencyMatrix;
 	
 }
+
+int DirectedGraph::getSize()
+{
+	return _size;
+}
+
 // note: why need?????????????????????????
 void DirectedGraph::MakeEmptyGraph(int n)
 {
@@ -53,4 +60,28 @@ void DirectedGraph::AddEdge(int u, int v, int capacity) const
 void DirectedGraph::RemoveEdge(int u, int v) const
 {
 	_AdjacencyMatrix[u][v] = 0;
+}
+
+void DirectedGraph::Show()
+{
+	for (int i = 0; i < _size; i++)
+	{
+		for (int j = 0; j < _size; j++)
+		{
+			cout << "| " << _AdjacencyMatrix[i][j] << " |";
+		}
+		cout << endl;
+	}
+}
+
+void DirectedGraph::Show()
+{
+	for (int i = 0; i < _size; i++)
+	{
+		for (int j = 0; j < _size; j++)
+		{
+			cout << "| " << _AdjacencyMatrix[i][j] << " |";
+		}
+		cout << endl;
+	}
 }
