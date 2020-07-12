@@ -5,6 +5,8 @@ class Node
 public:
 	int data;
 	Node* next;
+
+public:
 	Node();
 	Node(int item, Node *ptr = nullptr);
 	~Node() = default;
