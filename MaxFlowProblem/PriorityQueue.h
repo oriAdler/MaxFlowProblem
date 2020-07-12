@@ -1,30 +1,65 @@
 ﻿//-----------------------------------------------------------------------------------------------//
-#ifndef __HEAP_H_
-#define __HEAP_H_
-#include "system.h"
+#ifndef __PRIORITYQUEUE_H_
+#define __PRIORITYQUEUE_H_
+
+#include <iostream>
+using namespace std;
 //-----------------------------------------------------------------------------------------------//
-class Heap
+// note: encapsulate???????
+
+class KVPair
 {
 private:
-	Person** _data;
+	int _key;
+	int _value;
+public:
+	KVPair() = default;
+	KVPair(const int newKey, const int newValue)
+	{
+		_key = newKey;
+		_value = newValue;
+	}
+	int getKey()
+	{
+		return _key;
+	}
+	int getValue()
+	{
+		return _value;
+	}
+	bool operator <(const KVPair& other) const
+	{
+		return _key < other._key;
+	}
+	bool operator >(const KVPair& other) const
+	{
+		return _key > other._key;
+	}
+
+};
+class PriorityQueue
+{
+
+private:
+	KVPair* _data=nullptr;
 	int _MaxSize;
-	int _heapSize;
+	int _PriorityQueueSize;
 	int _allocated;
 
+	PriorityQueue(int max);
 	static int Left(int node);
 	static int Right(int node);
 	static int Parent(int node);
-	void fixHeap(int node, int& numComp);
+	void fixPriorityQueue(int node);
 
 public:
-	Heap(int max);
-	Heap(Person* arr[], int n, int& numComp);	// question: במקום להעביר פרמטר numcomp משתנה סטטי?
-	~Heap();
-	Person* min();
-	Person* deleteMin(int& numComp);
-	void insert(Person* item);
-
-	static Person* selectHeap(Person* arr[], int n, int k, int& numComp);
+	PriorityQueue(KVPair max);
+	PriorityQueue(KVPair arr[], int n);
+	~PriorityQueue();
+	KVPair max();
+	KVPair deleteMax();
+	bool isEmpty() const;
+	void insert(KVPair item);
 };
-//-----------------------------------------------------------------------------------------------//
-#endif //__HEAP_H_
+
+#endif //__PRIORITYQUEUE_H_
