@@ -157,6 +157,7 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="PriorityQueue.cpp" />
     <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectedGraph.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="PriorityQueue.h" />
     <ClInclude Include="Queue.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

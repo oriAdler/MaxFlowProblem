@@ -1,5 +1,6 @@
 ﻿#include "DirectedGraph.h"
 #include <cstring>
+#include "Queue.h"
 #include <iostream>
 using namespace std;
 
@@ -8,13 +9,23 @@ DirectedGraph::DirectedGraph(int n)
 	MakeEmptyGraph(n);
 }
 
+DirectedGraph::DirectedGraph(const DirectedGraph& other)
+{
+	this->MakeEmptyGraph(other._size);
+	memcpy(_AdjacencyMatrix, other._AdjacencyMatrix, _size * _size * sizeof(int));
+}
+
 DirectedGraph::~DirectedGraph()
 {
-	for (int i = 0; i < _size; i++)
+	if (!_size)
 	{
-		delete[] _AdjacencyMatrix[i];
+
+		for (int i = 0; i < _size; i++)
+		{
+			delete[] _AdjacencyMatrix[i];
+		}
+		delete[] _AdjacencyMatrix;
 	}
-	delete[] _AdjacencyMatrix;
 }
 
 int DirectedGraph::getSize() const
@@ -66,8 +77,15 @@ void DirectedGraph::RemoveEdge(int u, int v) const
 
 void DirectedGraph::Show() const
 {
+	cout << "  ";
 	for (int i = 0; i < _size; i++)
 	{
+		cout << "| " << i + 1 << " |";
+	}
+	cout << endl;
+	for (int i = 0; i < _size; i++)
+	{
+		cout << 1 + i << " |";
 		for (int j = 0; j < _size; j++)
 		{
 			cout << "| " << _AdjacencyMatrix[i][j] << " |";

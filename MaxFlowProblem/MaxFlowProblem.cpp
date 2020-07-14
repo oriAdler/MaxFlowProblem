@@ -1,25 +1,48 @@
-// MaxFlowProblem.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
 #include <iostream>
-#include "DirectedGraph.h"
+#include "FlowNetwork.h"
+#include "Utils.h"
 using namespace std;
 
-int main(int argc, char* argv[])
+FlowNetwork* handleInput()
 {
-	int n;
-    DirectedGraph G(5);
-	G.Show();
-	cin >> n;
+	int numOfV, numOfEdges, s, t;
+	cin >> numOfV;
+
+	const DirectedGraph newGraph = DirectedGraph(numOfV);
+	cin >> numOfEdges;
+	cin >> s;
+	cin >> t;
+
+	for (int i = 0; i < numOfEdges; i++)
+	{
+		int u, v, capacity;
+		cin >> u >> v >> capacity;
+		newGraph.AddEdge(u-1, v-1, capacity);
+	}
+	// note: start from 
+	FlowNetwork* newFlowNetwork = new FlowNetwork(newGraph, s-1, t-1);
+	return newFlowNetwork;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void printArr(int arr[], int size)
+{
+	for(int i=0; i<size; i++)
+	{
+		cout << " " << arr[i] << " " << endl;
+	}
+}
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+int main()
+{
+	FlowNetwork* newFlowNetwork = handleInput();
+	newFlowNetwork->getDirectedGraph().Show();
+	int* parent = new int[newFlowNetwork->getDirectedGraph().getSize()];
+	Utils::BFSPath(newFlowNetwork->getDirectedGraph(), 0, 5, parent);
+	printArr(parent, newFlowNetwork->getDirectedGraph().getSize());
+	//
+	//DirectedGraph G(6);
+	//int n;
+	//G.Show();
+	//cin >> n;
+}
