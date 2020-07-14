@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 using namespace std;
+
 DirectedGraph::DirectedGraph(int n)
 {
 	MakeEmptyGraph(n);
@@ -11,32 +12,29 @@ DirectedGraph::~DirectedGraph()
 {
 	for (int i = 0; i < _size; i++)
 	{
-		delete[]_AdjacencyMatrix[i];
+		delete[] _AdjacencyMatrix[i];
 	}
 	delete[] _AdjacencyMatrix;
-	
 }
 
-int DirectedGraph::getSize()
+int DirectedGraph::getSize() const
 {
 	return _size;
 }
 
 // note: why need?????????????????????????
+//Creats a graph with n vertices and no edges.
 void DirectedGraph::MakeEmptyGraph(int n)
 {
-
 	_size = n;
 	_AdjacencyMatrix = new int*[n];
 	for(int i=0; i< _size ; i++)
 	{
 		_AdjacencyMatrix[i] = new int[n];
-
 		for(int j=0; j< _size; j++)
 		{
 			_AdjacencyMatrix[i][j] = 0;
 		}
-		//memset(_AdjacencyMatrix[i], 0, sizeof(int) * sizeof _size);
 	}
 }
 
@@ -44,11 +42,15 @@ bool DirectedGraph::IsAdjacent(int u, int v) const
 {
 	return _AdjacencyMatrix[u][v];
 }
+
 //note: what to return?????????????????????????
+//Returns an adjacency list of u.
+//If (u,v) IN E Then (u,v) != 0,
+//Else (u,v) = 0.
 int* DirectedGraph::GetAdjList(int u) const
 {
 	int* AdjList = new int[_size];
-	memcpy(AdjList, _AdjacencyMatrix[u], sizeof(int));
+	memcpy(AdjList, _AdjacencyMatrix[u], _size * sizeof(int));
 	return AdjList;
 }
 
@@ -62,19 +64,7 @@ void DirectedGraph::RemoveEdge(int u, int v) const
 	_AdjacencyMatrix[u][v] = 0;
 }
 
-void DirectedGraph::Show()
-{
-	for (int i = 0; i < _size; i++)
-	{
-		for (int j = 0; j < _size; j++)
-		{
-			cout << "| " << _AdjacencyMatrix[i][j] << " |";
-		}
-		cout << endl;
-	}
-}
-
-void DirectedGraph::Show()
+void DirectedGraph::Show() const
 {
 	for (int i = 0; i < _size; i++)
 	{

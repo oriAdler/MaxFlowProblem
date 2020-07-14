@@ -3,52 +3,48 @@
 
 PriorityQueue::PriorityQueue(int max)
 {
-	_data = new KVPair [max];
+	_data = new Pair[max];
 	_MaxSize = max;
 	_PriorityQueueSize = 0;
 	_allocated = 1;
 }
 
-//-----------------------------------------------------------------------------------------------//
-// note: function  KVPair? 
-PriorityQueue::PriorityQueue(KVPair arr[], int n)
+// note: function  Pair? 
+PriorityQueue::PriorityQueue(Pair arr[], int n)
 {
 	_PriorityQueueSize = _MaxSize = n;
 
-	_data = new KVPair[_MaxSize];
+	_data = arr;
 	_allocated = 0;
-	//for (int i = 0; i < n; i++)	// makes a copy of the original array.
-	//{
-	//	_data[i] = arr[i];
-	//}
 
 	for (int j = n / 2 - 1; j >= 0; j--)	// floyd algorithm.
+	{
 		fixPriorityQueue(j);
+	}
 }
-//-----------------------------------------------------------------------------------------------//
+
 int PriorityQueue::Left(int node)
 {
 	return (2 * node + 1);
 }
-//-----------------------------------------------------------------------------------------------//
+
 int PriorityQueue::Right(int node)
 {
 	return (2 * node + 2);
 }
-//-----------------------------------------------------------------------------------------------//
+
 int PriorityQueue::Parent(int node)
 {
 	return (node - 1) / 2;
 }
-//-----------------------------------------------------------------------------------------------//
-// some changes in the order of if-else terms, in order to count exectly comparion number.
+
 void PriorityQueue::fixPriorityQueue(int node)
 {
 	int max;
 	int left = Left(node);
 	int right = Right(node);
 
-	// _key is id, person has '>' operator which compare id's.
+	//Find maximum among node, left and right
 	if (left < _PriorityQueueSize && _data[left] > _data[node])
 	{
 		max = left;
@@ -61,13 +57,13 @@ void PriorityQueue::fixPriorityQueue(int node)
 	{
 		max = right;
 	}
+	//Swap values if necessary and continue fixing the heap towards the leaves.
 	if (max != node)
 	{
-		// note: swap
+		swap(_data[node], _data[max]);	// note: swap from utility?
 		fixPriorityQueue(max);
 	}
 }
-//-----------------------------------------------------------------------------------------------//
 
 PriorityQueue::~PriorityQueue()
 {
@@ -77,15 +73,15 @@ PriorityQueue::~PriorityQueue()
 	}
 	_data = nullptr;
 }
-//-----------------------------------------------------------------------------------------------//
-KVPair PriorityQueue::deleteMax()
+
+Pair PriorityQueue::deleteMax()
 {
 	if (_PriorityQueueSize < 1)
 	{
-		cout << "Error: EMPTY PriorityQueue\n";
+		cout << "Error: EMPTY Priority Queue\n";
 		exit(1);
 	}
-	KVPair max = _data[0];
+	Pair max = _data[0];
 	_PriorityQueueSize--;
 	_data[0] = _data[_PriorityQueueSize];
 	fixPriorityQueue(0);
@@ -97,8 +93,7 @@ bool PriorityQueue::isEmpty() const
 	return !_PriorityQueueSize;
 }
 
-//-----------------------------------------------------------------------------------------------//
-KVPair PriorityQueue::max()
+Pair PriorityQueue::max()
 {
 	if (_PriorityQueueSize < 1)
 	{
@@ -107,18 +102,18 @@ KVPair PriorityQueue::max()
 	}
 	return _data[0];
 }
-//-----------------------------------------------------------------------------------------------//
-void PriorityQueue::insert(KVPair item)
+
+void PriorityQueue::insert(Pair item)
 {
 	if (_PriorityQueueSize == _MaxSize)
 	{
-		cout << "Error: PriorityQueue FULL\n";
+		cout << "Error: Priority Queue FULL\n";
 		exit(1);
 	}
 	int i = _PriorityQueueSize;
 	_PriorityQueueSize++;
 
-	while ((i > 0) && (_data[Parent(i)].getKey() < item.getKey()))
+	while ((i > 0) && (_data[Parent(i)] < item))
 	{
 		_data[i] = _data[Parent(i)];
 		i = Parent(i);

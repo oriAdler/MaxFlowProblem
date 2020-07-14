@@ -2,10 +2,15 @@
 //
 
 #include <iostream>
+#include "DirectedGraph.h"
+using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::cout << "Hello World!\n";
+	int n;
+    DirectedGraph G(5);
+	G.Show();
+	cin >> n;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

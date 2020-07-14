@@ -1,7 +1,7 @@
 ﻿#include "Queue.h"
-
 #include <iostream>
 using namespace std;
+
 Queue::Queue()
 {
 	head = new Node;
@@ -21,12 +21,21 @@ void Queue::MakeEmpty()
 		head = head->next;
 		delete temp;
 	}
-	
 }
 
 int Queue::IsEmpty()
 {
 	return head == tail;
+}
+
+int Queue::Front()
+{
+	if (IsEmpty())
+	{
+		cout << "Error: QUEUE EMPTY!" << endl;
+		exit(1);
+	}
+	return (head->next->data);
 }
 
 void Queue::EnQueue(int item)
@@ -40,7 +49,7 @@ int Queue::DeQueue()
 {
 	if (IsEmpty())
 	{
-		cout << "Error: QUEUE EMPTY!!" << endl;
+		cout << "Error: QUEUE EMPTY!" << endl;
 		exit(1);
 	}
 	Node *temp = head->DeleteAfter();

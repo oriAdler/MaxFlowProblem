@@ -7,59 +7,52 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------//
 // note: encapsulate???????
 
-class KVPair
+class Pair
 {
 private:
 	int _key;
-	int _value;
+	int _data;
 public:
-	KVPair() = default;
-	KVPair(const int newKey, const int newValue)
+	Pair() = default;
+	Pair(const int newKey, const int newData)
 	{
 		_key = newKey;
-		_value = newValue;
+		_data = newData;
 	}
-	int getKey()
-	{
-		return _key;
-	}
-	int getValue()
-	{
-		return _value;
-	}
-	bool operator <(const KVPair& other) const
+	int getKey() const { return _key; }
+	int getData() const { return _data; }
+	bool operator <(const Pair& other) const
 	{
 		return _key < other._key;
 	}
-	bool operator >(const KVPair& other) const
+	bool operator >(const Pair& other) const
 	{
 		return _key > other._key;
 	}
-
 };
+
 class PriorityQueue
 {
-
 private:
-	KVPair* _data=nullptr;
+	Pair* _data = nullptr;
 	int _MaxSize;
 	int _PriorityQueueSize;
 	int _allocated;
 
-	PriorityQueue(int max);
 	static int Left(int node);
 	static int Right(int node);
 	static int Parent(int node);
 	void fixPriorityQueue(int node);
 
 public:
-	PriorityQueue(KVPair max);
-	PriorityQueue(KVPair arr[], int n);
+	PriorityQueue(int max);
+	PriorityQueue(Pair arr[], int n);
 	~PriorityQueue();
-	KVPair max();
-	KVPair deleteMax();
+	Pair max();
+	Pair deleteMax();
+	void insert(Pair item);
 	bool isEmpty() const;
-	void insert(KVPair item);
+	//void increaseKey(place, newKey);	//Note: implement increaseKey
 };
 
 #endif //__PRIORITYQUEUE_H_
