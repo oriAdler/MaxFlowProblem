@@ -93,3 +93,13 @@ void DirectedGraph::Show() const
 		cout << endl;
 	}
 }
+
+const int& DirectedGraph::operator()(int x, int y) const
+{
+	return _AdjacencyMatrix[x][y];
+}
+
+int& DirectedGraph::operator()(int x, int y)
+{
+	return _AdjacencyMatrix[x][y];
+}

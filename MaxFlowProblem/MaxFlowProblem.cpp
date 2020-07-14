@@ -4,12 +4,12 @@
 #include "Utils.h"
 using namespace std;
 
-FlowNetwork* handleInput()
+DirectedGraph* handleInput()
 {
 	int numOfV, numOfEdges, s, t;
 	cin >> numOfV;
 
-	const DirectedGraph newGraph = DirectedGraph(numOfV);
+	DirectedGraph* newGraph = new DirectedGraph(numOfV);
 	cin >> numOfEdges;
 	cin >> s;
 	cin >> t;
@@ -18,28 +18,32 @@ FlowNetwork* handleInput()
 	{
 		int u, v, capacity;
 		cin >> u >> v >> capacity;
-		newGraph.AddEdge(u-1, v-1, capacity);
+		newGraph->AddEdge(u-1, v-1, capacity);
 	}
 	// note: start from 
-	FlowNetwork* newFlowNetwork = new FlowNetwork(newGraph, s-1, t-1);
-	return newFlowNetwork;
+	//FlowNetwork* newFlowNetwork = new FlowNetwork(newGraph, s-1, t-1);
+	return newGraph;
 }
 
-void printArr(int arr[], int size)
-{
-	for(int i=0; i<size; i++)
-	{
-		cout << " " << arr[i] << " " << endl;
-	}
-}
+//void printArr(int arr[], int size)
+//{
+//	for(int i=0; i<size; i++)
+//	{
+//		cout << " " << arr[i] << " " << endl;
+//	}
+//}
 
 int main()
 {
-	FlowNetwork* newFlowNetwork = handleInput();
-	newFlowNetwork->getDirectedGraph().Show();
-	int* parent = new int[newFlowNetwork->getDirectedGraph().getSize()];
-	Utils::BFSPath(newFlowNetwork->getDirectedGraph(), 0, 5, parent);
-	printArr(parent, newFlowNetwork->getDirectedGraph().getSize());
+	DirectedGraph* newGraph = handleInput();
+	newGraph->Show();
+	int numOfIterations = 0;
+	MinCut res = Utils::fordFulkerson(*newGraph, 0, 5, numOfIterations);
+	res.Show();
+	cout << "Number of iteration = " << numOfIterations;
+	//int* parent = new int[newGraph->getSize()];
+	//Utils::BFSPath(*newGraph, 0, 5, parent);
+	//printArr(parent, newFlowNetwork->getDirectedGraph().getSize());
 	//
 	//DirectedGraph G(6);
 	//int n;

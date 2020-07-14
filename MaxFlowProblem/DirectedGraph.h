@@ -24,4 +24,6 @@ public:
 	void RemoveEdge(int u, int v) const;
 	int* BFS(int s);
 	void Show() const;
+	const int& operator()(int x, int y) const;
+	int& operator()(int x, int y);
 };
