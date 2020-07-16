@@ -152,8 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DirectedGraph.cpp" />
-    <ClCompile Include="FlowNetwork.cpp" />
-    <ClCompile Include="LinkedList.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="MaxFlowProblem.cpp" />
     <ClCompile Include="MinCut.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -163,8 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectedGraph.h" />
-    <ClInclude Include="FlowNetwork.h" />
-    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MinCut.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="PriorityQueue.h" />

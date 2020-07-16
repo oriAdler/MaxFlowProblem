@@ -21,13 +21,14 @@ public:
 	}
 	int getKey() const { return _key; }
 	int getData() const { return _data; }
+	void setData(int data) { _data = data; }
 	bool operator <(const Pair& other) const
 	{
-		return _key < other._key;
+		return _data < other._data;
 	}
 	bool operator >(const Pair& other) const
 	{
-		return _key > other._key;
+		return _data > other._data;
 	}
 };
 
@@ -38,12 +39,14 @@ private:
 	int _MaxSize;
 	int _PriorityQueueSize;
 	int _allocated;
+	int* _ptrArr;
 
 	static int Left(int node);
 	static int Right(int node);
 	static int Parent(int node);
 	void fixPriorityQueue(int node);
-
+	void swapNodes(Pair& first, Pair& second);
+	
 public:
 	PriorityQueue(int max);
 	PriorityQueue(Pair arr[], int n);
@@ -52,7 +55,18 @@ public:
 	Pair deleteMax();
 	void insert(Pair item);
 	bool isEmpty() const;
-	//void increaseKey(place, newKey);	//Note: implement increaseKey
+	void increaseKey(int node, int newData);
 };
+
+//Swap nodes and update pointers.
+inline void PriorityQueue::swapNodes(Pair& first, Pair& second)
+{
+	Pair temp = first;
+	int firstIndex = _ptrArr[first.getKey()];
+	_ptrArr[first.getKey()] = _ptrArr[second.getKey()];
+	first = second;
+	_ptrArr[second.getKey()] = firstIndex;
+	second = temp;
+}
 
 #endif //__PRIORITYQUEUE_H_

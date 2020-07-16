@@ -13,7 +13,6 @@ private:
 	
 public:
 	DirectedGraph(int n);
-	DirectedGraph() = default;	// note:
 	DirectedGraph(const DirectedGraph& other);
 	~DirectedGraph();
 	int getSize() const;

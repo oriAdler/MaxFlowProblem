@@ -12,8 +12,7 @@ DirectedGraph::DirectedGraph(int n)
 DirectedGraph::DirectedGraph(const DirectedGraph& other)
 {
 	this->MakeEmptyGraph(other._size);
-	//memcpy(this->_AdjacencyMatrix, other._AdjacencyMatrix, _size * _size * sizeof(int));
-	for(int i=0; i<_size; i++)	//update: a problem with copy constructor, memory leak
+	for(int i=0; i<_size; i++)
 	{
 		for(int j=0; j<_size; j++)
 		{
@@ -24,7 +23,7 @@ DirectedGraph::DirectedGraph(const DirectedGraph& other)
 
 DirectedGraph::~DirectedGraph()
 {
-	if (_size != 0)	//update: wrong condition
+	if (_size != 0)	
 	{
 		for (int i = 0; i < _size; i++)
 		{
@@ -39,7 +38,6 @@ int DirectedGraph::getSize() const
 	return _size;
 }
 
-// note: why need?????????????????????????
 //Creats a graph with n vertices and no edges.
 void DirectedGraph::MakeEmptyGraph(int n)
 {
@@ -60,7 +58,7 @@ bool DirectedGraph::IsAdjacent(int u, int v) const
 	return _AdjacencyMatrix[u][v];
 }
 
-//note: what to return?????????????????????????
+//note: why need this function if we don't use it????
 //Returns an adjacency list of u.
 //If (u,v) IN E Then (u,v) != 0,
 //Else (u,v) = 0.
@@ -86,7 +84,7 @@ void DirectedGraph::Show() const
 	cout << "  ";
 	for (int i = 0; i < _size; i++)
 	{
-		cout << "| " << i + 1 << " |";
+		cout << " | " << i + 1 << " |";
 	}
 	cout << endl;
 	for (int i = 0; i < _size; i++)
@@ -94,7 +92,12 @@ void DirectedGraph::Show() const
 		cout << 1 + i << " |";
 		for (int j = 0; j < _size; j++)
 		{
-			cout << "| " << _AdjacencyMatrix[i][j] << " |";
+			cout << "| " << _AdjacencyMatrix[i][j];
+			if(_AdjacencyMatrix[i][j] < 10)
+			{
+				cout << " ";
+			}
+			cout << " |";
 		}
 		cout << endl;
 	}

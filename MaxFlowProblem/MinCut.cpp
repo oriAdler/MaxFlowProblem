@@ -1,11 +1,12 @@
 ﻿#include "MinCut.h"
 
-MinCut::MinCut(int arr[], int size, int max)
+MinCut::MinCut(int arr[], int size, int max, int s)
 {
 	_maxFlow = max;
 	for (int i = 0; i < size; i++)
 	{
-		if (arr[i] != INT_MAX)
+		//If vertex is source or reachable in Gf
+		if (i == s || (arr[i] != INT_MAX && arr[i] != INT_MIN))
 		{
 			_S.EnQueue(i);
 		}

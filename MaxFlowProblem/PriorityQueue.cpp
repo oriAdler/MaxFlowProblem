@@ -7,15 +7,22 @@ PriorityQueue::PriorityQueue(int max)
 	_MaxSize = max;
 	_PriorityQueueSize = 0;
 	_allocated = 1;
+	_ptrArr = new int[max];
 }
 
-// note: function  Pair? 
 PriorityQueue::PriorityQueue(Pair arr[], int n)
 {
 	_PriorityQueueSize = _MaxSize = n;
 
 	_data = arr;
 	_allocated = 0;
+	_ptrArr = new int[n];
+
+	//Init ptr array
+	for(int i=0; i<_MaxSize; i++)	//note: maxSize vs currentSize?
+	{
+		_ptrArr[_data[i].getKey()] = i;
+	}
 
 	for (int j = n / 2 - 1; j >= 0; j--)	// floyd algorithm.
 	{
@@ -60,7 +67,7 @@ void PriorityQueue::fixPriorityQueue(int node)
 	//Swap values if necessary and continue fixing the heap towards the leaves.
 	if (max != node)
 	{
-		swap(_data[node], _data[max]);	// note: swap from utility?
+		swapNodes(_data[node], _data[max]);	
 		fixPriorityQueue(max);
 	}
 }
@@ -72,6 +79,7 @@ PriorityQueue::~PriorityQueue()
 		delete[]_data;
 	}
 	_data = nullptr;
+	delete[]_ptrArr;
 }
 
 Pair PriorityQueue::deleteMax()
@@ -83,7 +91,9 @@ Pair PriorityQueue::deleteMax()
 	}
 	Pair max = _data[0];
 	_PriorityQueueSize--;
-	_data[0] = _data[_PriorityQueueSize];
+	//Using swap in order to update pointers
+	swapNodes(_data[0], _data[_PriorityQueueSize]);
+	/*_data[0] = _data[_PriorityQueueSize];*/
 	fixPriorityQueue(0);
 	return max;
 }
@@ -91,6 +101,18 @@ Pair PriorityQueue::deleteMax()
 bool PriorityQueue::isEmpty() const
 {
 	return !_PriorityQueueSize;
+}
+
+void PriorityQueue::increaseKey(int node, int newData)
+{
+	int i = _ptrArr[node]; //Extract node's location
+	_data[i].setData(newData);
+	//The increased node will trickle up until the priority queue is fixed.
+	while ((i > 0) && (_data[Parent(i)] < _data[i]))
+	{
+		swapNodes(_data[i], _data[Parent(i)]);
+		i = Parent(i);
+	}
 }
 
 Pair PriorityQueue::max()
@@ -113,11 +135,15 @@ void PriorityQueue::insert(Pair item)
 	int i = _PriorityQueueSize;
 	_PriorityQueueSize++;
 
-	while ((i > 0) && (_data[Parent(i)] < item))
+	_data[i] = item;	//Insert item to most left leaf.
+	_ptrArr[item.getKey()] = i;	//Update item's pointer.
+	while ((i > 0) && (_data[Parent(i)] < _data[i]))
 	{
-		_data[i] = _data[Parent(i)];
+		swapNodes(_data[i], _data[Parent(i)]);
+		//_data[i] = _data[Parent(i)];
 		i = Parent(i);
 	}
-	_data[i] = item;
+	/*_data[i] = item;
+	_ptrArr[item.getKey()] = i;*/
 }
 //-----------------------------------------------------------------------------------------------//
