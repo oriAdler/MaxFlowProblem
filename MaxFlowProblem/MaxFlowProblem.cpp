@@ -3,29 +3,13 @@
 #include "PriorityQueue.h"
 #include "Utils.h"
 using namespace std;
+#include "Input.h"
 
 #define _CRTDBG_MAP_ALLOC	//note: check memory leak
 #include <stdlib.h>
 #include <crtdbg.h>
 
-DirectedGraph* handleInput(int& s, int& t)
-{
-	int numOfV, numOfEdges;
-	cin >> numOfV;
 
-	DirectedGraph* newGraph = new DirectedGraph(numOfV);
-	cin >> numOfEdges;
-	cin >> s;
-	cin >> t;
-
-	for (int i = 0; i < numOfEdges; i++)
-	{
-		int u, v, capacity;
-		cin >> u >> v >> capacity;
-		newGraph->AddEdge(u-1, v-1, capacity);
-	}
-	return newGraph;
-}
 
 //void printArr(int arr[], int size)
 //{
@@ -38,10 +22,9 @@ DirectedGraph* handleInput(int& s, int& t)
 int main(int argc, char* argv[])
 {
 	cout << argc<<endl<<argv[0];
-
 	
 	int s, t;
-	DirectedGraph* newGraph = handleInput(s, t);
+	DirectedGraph* newGraph = Input::handleInput(s, t);
 	/*newGraph->Show();*/
 	cout << endl;
 	int numOfIterations = 0;
