@@ -7,10 +7,10 @@ bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int p[], int d[])
 	Queue Q;
 	int size = G.getSize();
 
-	//For each vertex v do d[v]<-infinity
+	//For each vertex v do d[v] <- Infinity
 	for (int i = 0; i < size; i++)
 	{
-		d[i] = INFINITY;
+		d[i] = INT_MAX;
 	}
 	Q.EnQueue(s);
 	d[s] = 0;
@@ -25,7 +25,7 @@ bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int p[], int d[])
 		{
 			if (G.IsAdjacent(u, v))
 			{
-				if (d[v] == INFINITY)
+				if (d[v] == INT_MAX)
 				{
 					p[v] = u;
 					d[v] = d[u] + 1;
@@ -35,13 +35,12 @@ bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int p[], int d[])
 		}
 	}
 	
-	return d[t]!=INFINITY ? true: false;
+	return d[t] != INT_MAX ? true : false;
 }
 
 // note: explain changes in algorithm
-const MinCut& Utils::fordFulkerson(const DirectedGraph& G, int s, int t, int& numOfIterations)
+MinCut* Utils::fordFulkerson(const DirectedGraph& G, int s, int t, int& numOfIterations)
 {
-	bool pathExist = true;
 	int u, v;
 	DirectedGraph Gf(G);	//The residual graph is equal to the original graph
 	int* parent = new int[G.getSize()];
@@ -53,7 +52,7 @@ const MinCut& Utils::fordFulkerson(const DirectedGraph& G, int s, int t, int& nu
 	{
 		numOfIterations++;	// note: no path at first iteration
 		//Calculate path's residual flow
-		int pathFlow = INFINITY;
+		int pathFlow = INT_MAX;
 		for (v = t; v != s; v = parent[v])
 		{
 			u = parent[v];
@@ -70,5 +69,7 @@ const MinCut& Utils::fordFulkerson(const DirectedGraph& G, int s, int t, int& nu
 	}
 
 	MinCut* res = new MinCut(d, G.getSize(), maxFlow);
-	return *res;
+	delete []parent;
+	delete []d;
+	return res;
 }

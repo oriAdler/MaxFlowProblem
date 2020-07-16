@@ -21,6 +21,7 @@ void Queue::MakeEmpty()
 		head = head->next;
 		delete temp;
 	}
+	delete tail;//update: when empty head==tail, must delete dummy node
 }
 
 int Queue::IsEmpty()

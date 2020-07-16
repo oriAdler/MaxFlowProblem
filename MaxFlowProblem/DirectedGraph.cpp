@@ -12,14 +12,20 @@ DirectedGraph::DirectedGraph(int n)
 DirectedGraph::DirectedGraph(const DirectedGraph& other)
 {
 	this->MakeEmptyGraph(other._size);
-	memcpy(_AdjacencyMatrix, other._AdjacencyMatrix, _size * _size * sizeof(int));
+	//memcpy(this->_AdjacencyMatrix, other._AdjacencyMatrix, _size * _size * sizeof(int));
+	for(int i=0; i<_size; i++)	//update: a problem with copy constructor, memory leak
+	{
+		for(int j=0; j<_size; j++)
+		{
+			this->_AdjacencyMatrix[i][j] = other._AdjacencyMatrix[i][j];
+		}
+	}
 }
 
 DirectedGraph::~DirectedGraph()
 {
-	if (!_size)
+	if (_size != 0)	//update: wrong condition
 	{
-
 		for (int i = 0; i < _size; i++)
 		{
 			delete[] _AdjacencyMatrix[i];

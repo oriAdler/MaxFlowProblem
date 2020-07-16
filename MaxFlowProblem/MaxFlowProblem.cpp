@@ -4,6 +4,10 @@
 #include "Utils.h"
 using namespace std;
 
+#define _CRTDBG_MAP_ALLOC	//note: check memory leak
+#include <stdlib.h>
+#include <crtdbg.h>
+
 DirectedGraph* handleInput()
 {
 	int numOfV, numOfEdges, s, t;
@@ -38,9 +42,13 @@ int main()
 	DirectedGraph* newGraph = handleInput();
 	newGraph->Show();
 	int numOfIterations = 0;
-	MinCut res = Utils::fordFulkerson(*newGraph, 0, 5, numOfIterations);
-	res.Show();
-	cout << "Number of iteration = " << numOfIterations;
+	MinCut* res = Utils::fordFulkerson(*newGraph, 0, 5, numOfIterations);
+	res->Show();
+	cout << "Number of iteration = " << numOfIterations << endl;
+
+	delete res;
+	delete newGraph;
+	cout << _CrtDumpMemoryLeaks();
 	//int* parent = new int[newGraph->getSize()];
 	//Utils::BFSPath(*newGraph, 0, 5, parent);
 	//printArr(parent, newFlowNetwork->getDirectedGraph().getSize());

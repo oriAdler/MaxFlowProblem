@@ -1,7 +1,6 @@
 ﻿#include "MinCut.h"
 
-
-MinCut::MinCut(int* arr, int size, int max)
+MinCut::MinCut(int arr[], int size, int max)
 {
 	_maxFlow = max;
 	for (int i = 0; i < size; i++)
@@ -17,13 +16,13 @@ MinCut::MinCut(int* arr, int size, int max)
 	}
 }
 
-void MinCut::Show()
+void MinCut::Show() 
 {
 	cout << "Max flow = " << _maxFlow << endl;
 	cout << "Min cut: S = ";
 	while (!_S.IsEmpty())
 	{
-		cout << _S.DeQueue() + 1;	//Convert output: u <- u+1.
+		cout << _S.DeQueue() + 1;	//Convert output: u <- u + 1.
 		if(!_S.IsEmpty())
 		{
 			cout << ", ";
