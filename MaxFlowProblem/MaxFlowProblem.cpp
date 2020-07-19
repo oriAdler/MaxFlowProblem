@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 	delete newGraph;
 
 	cout << endl;
-	// cout << _CrtDumpMemoryLeaks();
+	cout << _CrtDumpMemoryLeaks();
 
 	//-------------------------------------------------------------------
 }

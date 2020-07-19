@@ -4,47 +4,71 @@
 DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 {
 	string input;
-	ifstream inFile(fileName, ios::in);
-
-	getline(inFile, input, '\n'); //note: line 9 - 14 -> private function?
-	int numOfVertex = isValid(input, !isInteger(input), isPositive(input));
-	//if num of vertex is 0?
-
+	ifstream inFile("buggyInput.txt", ios::in);
+	if(!inFile.is_open())
+	{
+		cout << "File is not found";
+		exit(1);
+	}
+	
+	int numOfVertex = getValidLine(inFile, isInteger, isPositive);	//note: if num of vertex is 0?
 	DirectedGraph *newGraph = new DirectedGraph(numOfVertex);
 
-	getline(inFile, input, '\n');
-	int numOfEdges = isValid(input, !isInteger(input), !isNegative(input));
+	int numOfEdges = getValidLine(inFile, isInteger, isNonNegative);
 
-	getline(inFile, input, '\n');
-	s = isValid(input, !isInteger(input), !inRange(input, numOfVertex)); //note: check that 's' and 't' each one in separate line
-
-	getline(inFile, input, '\n');
-	t = isValid(input, !isInteger(input), !inRange(input, numOfVertex));
+	s = getValidLine(inFile, isInteger, inRange, numOfVertex); //note: check that 's' and 't' each one in separate line
+	t = getValidLine(inFile, isInteger, inRange ,numOfVertex);
 
 	//While not end of file, or there are still remaining edges to receive
 	for (int i = 0; i < numOfEdges; i++)
 	{
 		int trio[3];
-		inFile >> input;
-		if (!isValidTrio(input, trio))
+		//Checks if arrived at end of file, and if current line contains a valid trio.
+		if (!getline(inFile, input, '\n') || !isValidTrio(input, trio))
 		{
-			invalidInput();
+			invalidInput(inFile);
 		}
 		else
 		{
-			// u<-u-1 , v <- v-1, capacity
+			// u <- u-1 , v <- v-1, capacity
 			newGraph->AddEdge(trio[0] - 1, trio[1] - 1, trio[2]);
 		}
 	}
-	return newGraph;
-
+	////There is more data but 'm' is too small	//note: garbage data at end of file
+	//if(!inFile.eof())
+	//{
+	//	invalidInput();
+	//}
 	inFile.close();
+
+	return newGraph;
 }
-int Input::isValid(string input, bool arg1, bool arg2)
+
+//Checks if both arguments are true, and converts input into int.
+int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s))
 {
-	if (!(arg1 && arg2))
+	string input;
+	if (!getline(inFile, input, '\n'))
 	{
-		invalidInput();
+		invalidInput(inFile);
+	}
+	if (!(arg1(input) && arg2(input)))
+	{
+		invalidInput(inFile);
+	}
+	return stoi(input);
+}
+//Checks if both arguments are true, and converts input into int.
+int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s, int n),int num)
+{
+	string input;
+	if (!getline(inFile, input, '\n'))
+	{
+		invalidInput(inFile);
+	}
+	if (!(arg1(input) && arg2(input, num)))
+	{
+		invalidInput(inFile);
 	}
 	return stoi(input);
 }
@@ -61,16 +85,17 @@ bool Input::isInteger(string s)
 	return true;
 }
 
-void Input::invalidInput()
+void Input::invalidInput(ifstream& inFile)
 {
+	inFile.close();
 	cout << "Invalid input!" << endl;
 	exit(1);
 }
 
-bool Input::isNegative(string s)
+bool Input::isNonNegative(string s)
 {
 	int number = stoi(s);
-	return number < 0;
+	return number >= 0;
 }
 
 bool Input::isValidTrio(string s, int trio[])
