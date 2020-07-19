@@ -14,6 +14,7 @@ private:
 public:
 	DirectedGraph(int n);
 	DirectedGraph(const DirectedGraph& other);
+	const DirectedGraph& operator=(const DirectedGraph& other) = delete;	//update: dynamic memory allocation.
 	~DirectedGraph();
 	int getSize() const;
 	void MakeEmptyGraph(int n);

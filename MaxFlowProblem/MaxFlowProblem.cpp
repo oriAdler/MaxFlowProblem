@@ -8,7 +8,7 @@ using namespace std;
 #define _CRTDBG_MAP_ALLOC	//note: check memory leak
 #include <stdlib.h>
 #include <crtdbg.h>
-
+#include<fstream>
 
 
 //void printArr(int arr[], int size)
@@ -20,11 +20,10 @@ using namespace std;
 //}
 
 int main(int argc, char* argv[])
-{
-	cout << argc<<endl<<argv[0];
-	
+{	
 	int s, t;
-	DirectedGraph* newGraph = Input::handleInput(s, t);
+	DirectedGraph* newGraph = Input::handleInput(s, t, argv[1]);
+	
 	/*newGraph->Show();*/
 	cout << endl;
 	int numOfIterations = 0;
@@ -35,7 +34,7 @@ int main(int argc, char* argv[])
 	cout << "Number of iterations = " << numOfIterations << endl;
 	delete res;
 
-	//-------------------------------------------------------------------
+	////-------------------------------------------------------------------
 	
 	numOfIterations = 0;
 
