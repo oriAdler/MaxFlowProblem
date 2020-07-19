@@ -5,11 +5,9 @@
 using namespace std;
 #include "Input.h"
 
-#define _CRTDBG_MAP_ALLOC	//note: check memory leak
+#define _CRTDBG_MAP_ALLOC //note: check memory leak
 #include <stdlib.h>
-#include <crtdbg.h>
-#include<fstream>
-
+// #include <crtdbg.h>
 
 //void printArr(int arr[], int size)
 //{
@@ -19,27 +17,29 @@ using namespace std;
 //	}
 //}
 
-int main(int argc, char* argv[])
-{	
+int main(int argc, char *argv[])
+{
+	cout << argc << endl
+		 << argv[0];
+
 	int s, t;
-	DirectedGraph* newGraph = Input::handleInput(s, t, argv[1]);
-	
+	DirectedGraph *newGraph = Input::handleInput(s, t);
 	/*newGraph->Show();*/
 	cout << endl;
 	int numOfIterations = 0;
-	
-	MinCut* res = Utils::fordFulkerson(*newGraph, s-1, t-1, Utils::BFSPath, numOfIterations);
+
+	MinCut *res = Utils::fordFulkerson(*newGraph, s - 1, t - 1, Utils::BFSPath, numOfIterations);
 	cout << "BFS Method:" << endl;
 	res->Show();
 	cout << "Number of iterations = " << numOfIterations << endl;
 	delete res;
 
-	////-------------------------------------------------------------------
-	
+	//-------------------------------------------------------------------
+
 	numOfIterations = 0;
 
 	cout << endl;
-	res = Utils::fordFulkerson(*newGraph, s-1, t-1, Utils::dijkstraVariationPath, numOfIterations);
+	res = Utils::fordFulkerson(*newGraph, s - 1, t - 1, Utils::dijkstraVariationPath, numOfIterations);
 	cout << "Greedy Algorithm Method:" << endl;
 	res->Show();
 	cout << "Number of iterations = " << numOfIterations << endl;
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 	delete newGraph;
 
 	cout << endl;
-	cout << _CrtDumpMemoryLeaks();
+	// cout << _CrtDumpMemoryLeaks();
 
 	//-------------------------------------------------------------------
 }
