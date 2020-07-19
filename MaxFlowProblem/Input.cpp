@@ -1,4 +1,5 @@
-﻿#include "Input.h"
+﻿// ReSharper disable All
+#include "Input.h"
 #include "DirectedGraph.h"
 
 DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
@@ -24,14 +25,21 @@ DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 	{
 		int trio[3];
 		//Checks if arrived at end of file, and if current line contains a valid trio.
-		if (!getline(inFile, input, '\n') || !isValidTrio(input, trio))
+		if (!getline(inFile, input, '\n') || !isValidTrio(input, trio, numOfVertex))
 		{
 			invalidInput(inFile);
 		}
 		else
 		{
 			// u <- u-1 , v <- v-1, capacity
-			newGraph->AddEdge(trio[0] - 1, trio[1] - 1, trio[2]);
+			int u = trio[0] - 1, v = trio[1] - 1, capacity = trio[2];
+			//Check if edge already exists in current graph (parllel edges)
+			if(newGraph->IsAdjacent(u, v))
+			{
+				inFile.close();
+				invalidGraph();
+			}
+			newGraph->AddEdge(u, v, capacity);
 		}
 	}
 	////There is more data but 'm' is too small	//note: garbage data at end of file
@@ -74,13 +82,21 @@ int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string 
 }
 bool Input::isInteger(string s)
 {
+	//note: check that there si only one number
 	//Checks if all characters are digits
 	for (int i = 0; i < s.length(); i++)
 	{
-		if (isdigit(s[i] == false))
+		//skip whitespaces
+		if(isspace(s[i]))
+		{
+			continue;
+		}
+		//check if digit
+		if (!isDigit(s[i]))
 		{
 			return false;
 		}
+		
 	}
 	return true;
 }
@@ -98,77 +114,53 @@ bool Input::isNonNegative(string s)
 	return number >= 0;
 }
 
-bool Input::isValidTrio(string s, int trio[])
+bool Input::isValidTrio(string s, int trio[], int numOfVertex)
 {
 	stringstream currentLine;
 	//Store the whole line into string stream
 	currentLine << s;
 
 	//Runing loop till the end of the current line.
-	string temp;
+	string tempNumber;
 	int counter = 0;
 	while (!currentLine.eof() && counter < 3)
 	{
 		//Extracting word by word from stream
-		currentLine >> temp;
-		if (!isInteger(temp))
+		currentLine >> tempNumber;
+		if(counter==2)	//Check capacity is valid
 		{
-			return false;
+			if (!isInteger(tempNumber) && isNonNegative(tempNumber))
+			{
+				return false;
+			}
 		}
-		else
+		else	//Check is vertex is valid
 		{
-			trio[counter++] = stoi(temp);
+			if (!isInteger(tempNumber) && inRange(tempNumber, numOfVertex))
+			{
+				return false;
+			}
 		}
+		trio[counter++] = stoi(tempNumber);
 	}
 	return counter == 3 ? true : false;
 }
 
-//bool Input::checkInput(const DirectedGraph& G)
-//{
-//	int size = G.getSize();
-//	//check if simple graph
-//	for(int i=0; i<size; i++)
-//	{
-//		if(G(i,i))
-//		{
-//			return false;
-//		}
-//	}
-//}
+bool Input::checkValidGraph(const DirectedGraph &G)
+{
+	int size = G.getSize();
+	//Checks if self loop
+	for(int i=0; i<size; i++)
+	{
+		if (G(i,i)!=0)
+		{
+			invalidGraph();
+		}
+	}
+	return true;
+}
 
-//DirectedGraph* Input::handleInput(char* filepath, int& s, int& t)
-//{
-//	ifstream fio;
-//	fio.open(filepath, ios::in);
-//	string line;
-//	while (fio)
-//	{
-//		// Read a Line from standard input
-//		getline(cin, line);
-//
-//		// Press -1 to exit
-//		if (line == "-1")
-//			break;
-//
-//		// Write line in file
-//		fio << line << endl;
-//	}
-//
-//	int numOfV, numOfEdges;
-//	cin >> numOfV;
-//
-//	DirectedGraph* newGraph = new DirectedGraph(numOfV);
-//	cin >> numOfEdges;
-//	cin >> s;
-//	cin >> t;
-//
-//	for (int i = 0; i < numOfEdges; i++)
-//	{
-//		int u, v, capacity;
-//		cin >> u >> v >> capacity;
-//		newGraph->AddEdge(u - 1, v - 1, capacity);
-//	}
-//}
-//
-//return newGraph;
-//}
+bool Input::isDigit(char c)
+{
+	return c >= '0' && c <= '9';
+}

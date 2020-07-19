@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿// ReSharper disable All
+#pragma once
 #include "DirectedGraph.h"
 #include <iostream>
 #include <fstream>
@@ -18,12 +19,19 @@ private:
 	static bool isNonNegative(string s);
 	static bool isPositive(string s);
 	static bool inRange(string s, int n);
-	static bool isValidTrio(string s, int trio[]);
+	static bool isValidTrio(string s, int trio[], int numOfVertex);
 	static int getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s));
 	static int getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s, int n), int num);
-
-
+	static bool checkValidGraph(const DirectedGraph& G);
+	static void invalidGraph();
+	static bool isDigit(char c);
 };
+
+inline void Input::invalidGraph()
+{
+	cout << "Invalid Graph" << endl;
+	exit(1);
+}
 
 inline bool Input::inRange(string s, int n)
 {

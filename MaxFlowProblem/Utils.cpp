@@ -1,9 +1,9 @@
 ﻿#include "Utils.h"
 
-Pair* Utils::initializeSingleSource(DirectedGraph G, int s, int d[])
+pair<int,int>* Utils::initializeSingleSource(DirectedGraph G, int s, int d[])
 {
 	int numOfVertex = G.getSize();
-	Pair* arr = new Pair[numOfVertex];
+	pair<int,int>* arr = new pair<int,int>[numOfVertex];
 	// d[s] = 0, ∀ v≠s: d[v] = -∞
 	for(int i=0; i< numOfVertex; i++)
 	{
@@ -15,7 +15,7 @@ Pair* Utils::initializeSingleSource(DirectedGraph G, int s, int d[])
 		{
 			d[i] = INT_MIN;
 		}
-		arr[i] = Pair(i, d[i]);
+		arr[i] = pair<int,int>(i, d[i]);
 	}
 	
 	return arr;
@@ -72,7 +72,7 @@ MinCut* Utils::fordFulkerson(const DirectedGraph& G, int s, int t,
 	//Find better Path P from 's' to 't' via BFS
 	while (PathFunc(Gf, s, t, d, p))
 	{
-		numOfIterations++;	// note: no path at first iteration? base case - empty graph
+		numOfIterations++;
 		//Calculate path's residual flow
 		int pathFlow = INT_MAX;
 		for (v = t; v != s; v = p[v])
@@ -102,12 +102,12 @@ bool Utils::dijkstraVariationPath(const DirectedGraph& G, int s, int t, int d[],
 {
 	//Init
 	int numOfVertex = G.getSize();
-	Pair* arr = initializeSingleSource(G, s, d);
+	pair<int, int>* arr = initializeSingleSource(G, s, d);
 	PriorityQueue Q(arr, numOfVertex);
 
 	while (!Q.isEmpty())
 	{
-		int u = Q.deleteMax().getKey();
+		int u = Q.deleteMax().first;
 
 		//For each v IN Adj[u] do
 		for (int v = 0; v < numOfVertex; v++)

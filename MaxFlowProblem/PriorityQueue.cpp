@@ -3,14 +3,14 @@
 
 PriorityQueue::PriorityQueue(int max)
 {
-	_data = new Pair[max];
+	_data = new pair<int,int>[max];
 	_MaxSize = max;
 	_PriorityQueueSize = 0;
 	_allocated = 1;
 	_ptrArr = new int[max];
 }
 
-PriorityQueue::PriorityQueue(Pair arr[], int n)
+PriorityQueue::PriorityQueue(pair<int,int> arr[], int n)
 {
 	_PriorityQueueSize = _MaxSize = n;
 
@@ -21,7 +21,7 @@ PriorityQueue::PriorityQueue(Pair arr[], int n)
 	//Init ptr array
 	for(int i=0; i<_MaxSize; i++)	//note: maxSize vs currentSize?
 	{
-		_ptrArr[_data[i].getKey()] = i;
+		_ptrArr[_data[i].first] = i;
 	}
 
 	for (int j = n / 2 - 1; j >= 0; j--)	// floyd algorithm.
@@ -82,14 +82,14 @@ PriorityQueue::~PriorityQueue()
 	delete[]_ptrArr;
 }
 
-Pair PriorityQueue::deleteMax()
+pair<int,int> PriorityQueue::deleteMax()
 {
 	if (_PriorityQueueSize < 1)
 	{
 		cout << "Error: EMPTY Priority Queue\n";
 		exit(1);
 	}
-	Pair max = _data[0];
+	pair<int,int> max = _data[0];
 	_PriorityQueueSize--;
 	//Using swap in order to update pointers
 	swapNodes(_data[0], _data[_PriorityQueueSize]);
@@ -106,7 +106,7 @@ bool PriorityQueue::isEmpty() const
 void PriorityQueue::increaseKey(int node, int newData)
 {
 	int i = _ptrArr[node]; //Extract node's location
-	_data[i].setData(newData);
+	_data[i].second = newData;
 	//The increased node will trickle up until the priority queue is fixed.
 	while ((i > 0) && (_data[Parent(i)] < _data[i]))
 	{
@@ -115,7 +115,7 @@ void PriorityQueue::increaseKey(int node, int newData)
 	}
 }
 
-Pair PriorityQueue::max()
+pair<int,int> PriorityQueue::max()
 {
 	if (_PriorityQueueSize < 1)
 	{
@@ -125,7 +125,7 @@ Pair PriorityQueue::max()
 	return _data[0];
 }
 
-void PriorityQueue::insert(Pair item)
+void PriorityQueue::insert(pair<int,int> item)
 {
 	if (_PriorityQueueSize == _MaxSize)
 	{
@@ -136,7 +136,7 @@ void PriorityQueue::insert(Pair item)
 	_PriorityQueueSize++;
 
 	_data[i] = item;	//Insert item to most left leaf.
-	_ptrArr[item.getKey()] = i;	//Update item's pointer.
+	_ptrArr[item.first] = i;	//Update item's pointer.
 	while ((i > 0) && (_data[Parent(i)] < _data[i]))
 	{
 		swapNodes(_data[i], _data[Parent(i)]);
@@ -144,6 +144,6 @@ void PriorityQueue::insert(Pair item)
 		i = Parent(i);
 	}
 	/*_data[i] = item;
-	_ptrArr[item.getKey()] = i;*/
+	_ptrArr[item.first] = i;*/
 }
 //-----------------------------------------------------------------------------------------------//

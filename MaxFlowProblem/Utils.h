@@ -8,7 +8,7 @@
 class Utils
 {
 private:
-	static Pair* initializeSingleSource(DirectedGraph G, int s, int d[]);
+	static pair<int,int>* initializeSingleSource(DirectedGraph G, int s, int d[]);
 public:
 	static bool BFSPath(const DirectedGraph& G, int s, int t, int d[], int p[]);
 	static MinCut* fordFulkerson(const DirectedGraph& G, int s, int t, 
