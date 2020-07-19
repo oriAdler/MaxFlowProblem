@@ -9,16 +9,17 @@ using namespace std;
 class Input
 {
 public:
-	static DirectedGraph* handleInput(int& s, int& t, char* fileName);
+	static DirectedGraph *handleInput(int &s, int &t, char *fileName);
 	//DirectedGraph* handleInput(int& s, int& t);
 private:
-	static bool checkInput(const DirectedGraph& G);
+	static bool checkInput(const DirectedGraph &G);
 	static bool isInteger(string s);
-	static void invalidInput();	//note: close the file?
+	static void invalidInput(); //note: close the file?
 	static bool isNegative(string s);
 	static bool isPositive(string s);
 	static bool inRange(string s, int n);
 	static bool isValidTrio(string s, int trio[]);
+	static int isValid(string input, bool arg1, bool arg2);
 };
 
 inline bool Input::inRange(string s, int n)

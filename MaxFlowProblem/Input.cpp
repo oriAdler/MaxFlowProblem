@@ -1,51 +1,38 @@
 ﻿#include "Input.h"
 #include "DirectedGraph.h"
 
-DirectedGraph* Input::handleInput(int& s, int& t, char* fileName)
+DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 {
 	string input;
-	ifstream inFile("input1.txt", ios::in);
-	
-	getline(inFile, input);	//note: line 9 - 14 -> private function?
-	if(!isInteger(input) && !isNegative(input))
-	{
-		invalidInput();
-	}
-	int numOfVertex = stoi(input);	//if num of vertex is 0?
-	DirectedGraph* newGraph = new DirectedGraph(numOfVertex);
+	ifstream inFile(fileName, ios::in);
 
-	getline(inFile, input);
-	if (!isInteger(input) && !isNegative(input))
-	{
-		invalidInput();
-	}
-	int numOfEdges = stoi(input);
-	
-	getline(inFile, input);
-	if(!isInteger(input) && !inRange(input, numOfVertex))
-	{
-		invalidInput();
-	}
-	s = stoi(input);	//note: check that 's' and 't' each one in separate line
-	
-	getline(inFile, input);
-	if (!isInteger(input) && !inRange(input, numOfVertex))
-	{
-		invalidInput();
-	}
-	t = stoi(input);
+	getline(inFile, input, '\n'); //note: line 9 - 14 -> private function?
+	int numOfVertex = isValid(input, !isInteger(input), isPositive(input));
+	//if num of vertex is 0?
+
+	DirectedGraph *newGraph = new DirectedGraph(numOfVertex);
+
+	getline(inFile, input, '\n');
+	int numOfEdges = isValid(input, !isInteger(input), !isNegative(input));
+
+	getline(inFile, input, '\n');
+	s = isValid(input, !isInteger(input), !inRange(input, numOfVertex)); //note: check that 's' and 't' each one in separate line
+
+	getline(inFile, input, '\n');
+	t = isValid(input, !isInteger(input), !inRange(input, numOfVertex));
 
 	//While not end of file, or there are still remaining edges to receive
 	for (int i = 0; i < numOfEdges; i++)
 	{
 		int trio[3];
 		inFile >> input;
-		if(!isValidTrio(input, trio))
+		if (!isValidTrio(input, trio))
 		{
 			invalidInput();
 		}
 		else
 		{
+			// u<-u-1 , v <- v-1, capacity
 			newGraph->AddEdge(trio[0] - 1, trio[1] - 1, trio[2]);
 		}
 	}
@@ -53,7 +40,14 @@ DirectedGraph* Input::handleInput(int& s, int& t, char* fileName)
 
 	inFile.close();
 }
-
+int Input::isValid(string input, bool arg1, bool arg2)
+{
+	if (!(arg1 && arg2))
+	{
+		invalidInput();
+	}
+	return stoi(input);
+}
 bool Input::isInteger(string s)
 {
 	//Checks if all characters are digits
@@ -117,7 +111,6 @@ bool Input::isValidTrio(string s, int trio[])
 //	}
 //}
 
-
 //DirectedGraph* Input::handleInput(char* filepath, int& s, int& t)
 //{
 //	ifstream fio;
@@ -125,14 +118,14 @@ bool Input::isValidTrio(string s, int trio[])
 //	string line;
 //	while (fio)
 //	{
-//		// Read a Line from standard input 
+//		// Read a Line from standard input
 //		getline(cin, line);
 //
-//		// Press -1 to exit 
+//		// Press -1 to exit
 //		if (line == "-1")
 //			break;
 //
-//		// Write line in file 
+//		// Write line in file
 //		fio << line << endl;
 //	}
 //

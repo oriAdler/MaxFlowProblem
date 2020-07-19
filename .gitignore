@@ -265,3 +265,4 @@ MaxFlowProblem/MaxFlowProblem.dSYM/Contents/Info.plist
 MaxFlowProblem/MaxFlowProblem.dSYM/Contents/Resources/DWARF/MaxFlowProblem
 .gitignore
 MaxFlowProblem/MaxFlowProblem
+.vscode/settings.json

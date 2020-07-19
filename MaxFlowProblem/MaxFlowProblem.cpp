@@ -19,11 +19,9 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	cout << argc << endl
-		 << argv[0];
 
 	int s, t;
-	DirectedGraph *newGraph = Input::handleInput(s, t);
+	DirectedGraph *newGraph = Input::handleInput(s, t, argv[1]);
 	/*newGraph->Show();*/
 	cout << endl;
 	int numOfIterations = 0;
