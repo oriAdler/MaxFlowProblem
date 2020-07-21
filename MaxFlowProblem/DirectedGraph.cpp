@@ -2,6 +2,8 @@
 #include <cstring>
 #include "Queue.h"
 #include <iostream>
+
+#include "LinkedList.h"
 using namespace std;
 
 DirectedGraph::DirectedGraph(int n)
@@ -58,14 +60,19 @@ bool DirectedGraph::IsAdjacent(int u, int v) const
 	return _AdjacencyMatrix[u][v];
 }
 
-//note: why need this function if we don't use it????
 //Returns an adjacency list of u.
 //If (u,v) IN E Then (u,v) != 0,
 //Else (u,v) = 0.
-int* DirectedGraph::GetAdjList(int u) const
+LinkedList* DirectedGraph::GetAdjList(int u) const
 {
-	int* AdjList = new int[_size];
-	memcpy(AdjList, _AdjacencyMatrix[u], _size * sizeof(int));
+	LinkedList* AdjList = new LinkedList();
+	for(int v=0; v<_size; v++)
+	{
+		if(this->IsAdjacent(u,v))
+		{
+			AdjList->Append(v);
+		}
+	}
 	return AdjList;
 }
 

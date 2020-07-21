@@ -40,20 +40,21 @@ bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int d[], int p[])
 	while (!Q.IsEmpty())
 	{
 		int u = Q.DeQueue();
-
-		//For each v IN Adj[u] do
-		for (int v = 0; v < size; v++)
+		LinkedList* adjList = G.GetAdjList(u);
+		Node* current = adjList->first();
+		//For each v IN Adj[u] do 
+		while(current)
 		{
-			if (G.IsAdjacent(u, v))
+			int v = current->data;
+			if (d[v] == INT_MAX)
 			{
-				if (d[v] == INT_MAX)
-				{
-					p[v] = u;
-					d[v] = d[u] + 1;
-					Q.EnQueue(v);
-				}
+				p[v] = u;
+				d[v] = d[u] + 1;
+				Q.EnQueue(v);
 			}
+			current = current->next;
 		}
+		delete adjList;
 	}
 	
 	return d[t] != INT_MAX ? true : false;
@@ -108,22 +109,22 @@ bool Utils::dijkstraVariationPath(const DirectedGraph& G, int s, int t, int d[],
 	while (!Q.isEmpty())
 	{
 		int u = Q.deleteMax().first;
-
+		LinkedList* adjList = G.GetAdjList(u);
+		Node* current = adjList->first();
 		//For each v IN Adj[u] do
-		for (int v = 0; v < numOfVertex; v++)
+		while(current)
 		{
-			//Relax
-			if (G.IsAdjacent(u, v))
+			int v = current->data;
+			int min = d[u] < G(u, v) ? d[u] : G(u, v);
+			if (min > d[v])
 			{
-				int min = d[u] < G(u, v) ? d[u] : G(u, v);
-				if(min > d[v])
-				{
-					d[v] = min;
-					p[v] = u;
-					Q.increaseKey(v, d[v]);
-				}
+				d[v] = min;
+				p[v] = u;
+				Q.increaseKey(v, d[v]);
 			}
+			current = current->next;
 		}
+		delete adjList;
 	}
 
 	delete[]arr;

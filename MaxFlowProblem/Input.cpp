@@ -42,10 +42,11 @@ DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 		}
 		newGraph->AddEdge(u, v, capacity);
 	}
-	//Check there is no garabage data after last edge //note: fix
+	//Check there is no garabage data after last edge
 	while(!inFile.eof())
 	{
-		if(!getline(inFile, input, '\n') || countWords(input)!=0)
+		//If there are extra lines check those are empty lines
+		if(getline(inFile, input, '\n') && countWords(input)!=0)
 		{
 			invalidInput(inFile);
 		}
