@@ -64,6 +64,7 @@ bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int d[], int p[])
 MinCut* Utils::fordFulkerson(const DirectedGraph& G, int s, int t,
 	bool PathFunc(const DirectedGraph& G, int s, int t, int d[], int p[]), int& numOfIterations)
 {
+	//Init
 	int u, v;
 	DirectedGraph Gf(G);	//The residual graph is equal to the original graph
 	int* d = new int[G.getSize()];
