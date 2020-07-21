@@ -1,12 +1,10 @@
 
 #include <iostream>
-#include "PriorityQueue.h"
 #include "Utils.h"
 using namespace std;
 #include "Input.h"
 
 #define _CRTDBG_MAP_ALLOC //note: check memory leak
-#include <stdlib.h>
 // #include <crtdbg.h>
 
 //void printArr(int arr[], int size)

@@ -26,35 +26,30 @@ DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 	for (int i = 0; i < numOfEdges; i++)
 	{
 		int trio[3];
-		//Checks if arrived at end of file, and if current line contains a valid trio.
-		if (!getline(inFile, input, '\n') || countWords(input) != 3 
-			|| !isValidTrio(input, trio, numOfVertex))
+		int wordsCounter;
+		input = getNextNonEmptyLine(inFile);
+		if (countWords(input) != 3 || !isValidTrio(input, trio, numOfVertex))
 		{
 			invalidInput(inFile);
 		}
-		else
+		//Input is valid store data in graph
+		// u <- u-1 , v <- v-1, capacity
+		int u = trio[0] - 1, v = trio[1] - 1, capacity = trio[2];
+		//Check if edge already exists in current graph (parallel edges)
+		if(newGraph->IsAdjacent(u, v))
 		{
-			// u <- u-1 , v <- v-1, capacity
-			int u = trio[0] - 1, v = trio[1] - 1, capacity = trio[2];
-			//Check if edge already exists in current graph (parllel edges)
-			if(newGraph->IsAdjacent(u, v))
-			{
-				inFile.close();
-				invalidGraph();
-			}
-			newGraph->AddEdge(u, v, capacity);
+			invalidInput(inFile);
 		}
+		newGraph->AddEdge(u, v, capacity);
 	}
 	//Check there is no garabage data after last edge //note: fix
-	//while(!inFile.eof())
-	//{
-	//	char c;
-	//	inFile.get(c);
-	//	if (c != ' ' && c != '\n' && c != '\t')
-	//	{
-	//		invalidInput(inFile);
-	//	}
-	//}
+	while(!inFile.eof())
+	{
+		if(!getline(inFile, input, '\n') || countWords(input)!=0)
+		{
+			invalidInput(inFile);
+		}
+	}
 	inFile.close();
 
 	return newGraph;
@@ -63,13 +58,10 @@ DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 //Checks if both arguments are true, and converts input into int.
 int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s))
 {
-	string input;
+	
 	//Expecting to find a valid line with one word represting an integer.
-	if (!getline(inFile, input, '\n') || countWords(input) != 1)
-	{
-		invalidInput(inFile);
-	}
-	if (!(arg1(input) && arg2(input)))
+	string input = getNextNonEmptyLine(inFile);
+	if (countWords(input)!=1 || !arg1(input) || !arg2(input))
 	{
 		invalidInput(inFile);
 	}
@@ -78,18 +70,35 @@ int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string 
 //Checks if both arguments are true, and converts input into int.
 int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s, int n),int num)
 {
-	string input;
-	//Expecting to find a valid line with one word represting an integer.
-	if (!getline(inFile, input, '\n') || countWords(input) != 1)
-	{
-		invalidInput(inFile);
-	}
-	if (!(arg1(input) && arg2(input, num)))
+	string input = getNextNonEmptyLine(inFile);
+
+	if (countWords(input)!=1 || !arg1(input) || !arg2(input, num))
 	{
 		invalidInput(inFile);
 	}
 	return stoi(input);
 }
+string Input::getNextNonEmptyLine(ifstream& inFile)
+{
+	string input;
+	int wordsCounter;
+	//boolean represent valid read from file
+	bool validReadFromFile= (!inFile.eof() && getline(inFile, input, '\n'));
+	//continue while lines read from file are read successfully and line contains only white spaces.
+	while (validReadFromFile && countWords(input) == 0)
+	{
+		validReadFromFile = (!inFile.eof() && getline(inFile, input, '\n'));
+	}
+	//check that while was exited because of non zero word count and not becuase of line read failure
+	if(!validReadFromFile)
+	{
+		invalidInput();
+	}
+	//return relevant input after skipping all empty lines
+	return input;
+}
+
+
 
 bool Input::isInteger(string str)
 {
@@ -110,6 +119,12 @@ bool Input::isInteger(string str)
 void Input::invalidInput(ifstream& inFile)
 {
 	inFile.close();
+	cout << "Invalid input!" << endl;
+	exit(1);
+}
+
+void Input::invalidInput()
+{
 	cout << "Invalid input!" << endl;
 	exit(1);
 }
@@ -135,7 +150,7 @@ bool Input::isValidTrio(string str, int trio[], int numOfVertex)
 		currentLine >> tempNumber;
 		if(counter==2)	//Check capacity is valid
 		{
-			if (!isInteger(tempNumber) && isNonNegative(tempNumber))
+			if (!isInteger(tempNumber) && isPositive(tempNumber))
 			{
 				return false;
 			}
@@ -160,7 +175,7 @@ bool Input::checkValidGraph(const DirectedGraph &G)
 	{
 		if (G(i,i)!=0)
 		{
-			invalidGraph();
+			invalidInput();
 		}
 	}
 	return true;
