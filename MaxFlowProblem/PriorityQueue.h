@@ -1,38 +1,11 @@
-﻿//-----------------------------------------------------------------------------------------------//
-#ifndef __PRIORITYQUEUE_H_
-#define __PRIORITYQUEUE_H_
+﻿#pragma once
 
 #include <iostream>
 #include <utility>
 using namespace std;
-//-----------------------------------------------------------------------------------------------//
-// note: encapsulate???????
 
-//class Pair
-//{
-//private:
-//	int _key;
-//	int _data;
-//public:
-//	Pair() = default;
-//	Pair(const int newKey, const int newData)
-//	{
-//		_key = newKey;
-//		_data = newData;
-//	}
-//	int first const { return _key; }
-//	int getData() const { return _data; }
-//	void setData(int data) { _data = data; }
-//	bool operator <(const Pair& other) const
-//	{
-//		return _data < other._data;
-//	}
-//	bool operator >(const Pair& other) const
-//	{
-//		return _data > other._data;
-//	}
-//};
-
+//Using pair when all the 'first' elements are unique keys
+//associated with their 'second' value objects.
 class PriorityQueue
 {
 private:
@@ -69,4 +42,3 @@ inline void PriorityQueue::swapNodes(pair<int,int>& first, pair<int,int>& second
 	first.swap(second);
 }
 
-#endif //__PRIORITYQUEUE_H_

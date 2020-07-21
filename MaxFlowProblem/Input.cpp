@@ -5,27 +5,30 @@
 DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 {
 	string input;
-	ifstream inFile("buggyInput.txt", ios::in);
+	ifstream inFile(fileName, ios::in);
 	if(!inFile.is_open())
 	{
 		cout << "File is not found";
 		exit(1);
 	}
-	
+
+	//Get number of vertex, edges, 's' and 't': 
 	int numOfVertex = getValidLine(inFile, isInteger, isPositive);	//note: if num of vertex is 0?
 	DirectedGraph *newGraph = new DirectedGraph(numOfVertex);
 
 	int numOfEdges = getValidLine(inFile, isInteger, isNonNegative);
 
-	s = getValidLine(inFile, isInteger, inRange, numOfVertex); //note: check that 's' and 't' each one in separate line
+	s = getValidLine(inFile, isInteger, inRange, numOfVertex); 
 	t = getValidLine(inFile, isInteger, inRange ,numOfVertex);
 
+	//Get edges and capacities: 
 	//While not end of file, or there are still remaining edges to receive
 	for (int i = 0; i < numOfEdges; i++)
 	{
 		int trio[3];
 		//Checks if arrived at end of file, and if current line contains a valid trio.
-		if (!getline(inFile, input, '\n') || !isValidTrio(input, trio, numOfVertex))
+		if (!getline(inFile, input, '\n') || countWords(input) != 3 
+			|| !isValidTrio(input, trio, numOfVertex))
 		{
 			invalidInput(inFile);
 		}
@@ -42,10 +45,15 @@ DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 			newGraph->AddEdge(u, v, capacity);
 		}
 	}
-	////There is more data but 'm' is too small	//note: garbage data at end of file
-	//if(!inFile.eof())
+	//Check there is no garabage data after last edge //note: fix
+	//while(!inFile.eof())
 	//{
-	//	invalidInput();
+	//	char c;
+	//	inFile.get(c);
+	//	if (c != ' ' && c != '\n' && c != '\t')
+	//	{
+	//		invalidInput(inFile);
+	//	}
 	//}
 	inFile.close();
 
@@ -56,7 +64,8 @@ DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s))
 {
 	string input;
-	if (!getline(inFile, input, '\n'))
+	//Expecting to find a valid line with one word represting an integer.
+	if (!getline(inFile, input, '\n') || countWords(input) != 1)
 	{
 		invalidInput(inFile);
 	}
@@ -70,7 +79,8 @@ int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string 
 int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s, int n),int num)
 {
 	string input;
-	if (!getline(inFile, input, '\n'))
+	//Expecting to find a valid line with one word represting an integer.
+	if (!getline(inFile, input, '\n') || countWords(input) != 1)
 	{
 		invalidInput(inFile);
 	}
@@ -80,24 +90,20 @@ int Input::getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string 
 	}
 	return stoi(input);
 }
-bool Input::isInteger(string s)
+
+bool Input::isInteger(string str)
 {
-	//note: check that there si only one number
-	//Checks if all characters are digits
-	for (int i = 0; i < s.length(); i++)
+	removeSpaces(str);
+	int length = str.length();
+
+	for(int i=0; i<length; i++)
 	{
-		//skip whitespaces
-		if(isspace(s[i]))
-		{
-			continue;
-		}
-		//check if digit
-		if (!isDigit(s[i]))
+		if(!isDigit(str[i]))
 		{
 			return false;
 		}
-		
 	}
+
 	return true;
 }
 
@@ -108,17 +114,17 @@ void Input::invalidInput(ifstream& inFile)
 	exit(1);
 }
 
-bool Input::isNonNegative(string s)
+bool Input::isNonNegative(string str)
 {
-	int number = stoi(s);
+	int number = stoi(str);
 	return number >= 0;
 }
 
-bool Input::isValidTrio(string s, int trio[], int numOfVertex)
+bool Input::isValidTrio(string str, int trio[], int numOfVertex)
 {
 	stringstream currentLine;
 	//Store the whole line into string stream
-	currentLine << s;
+	currentLine << str;
 
 	//Runing loop till the end of the current line.
 	string tempNumber;
@@ -163,4 +169,50 @@ bool Input::checkValidGraph(const DirectedGraph &G)
 bool Input::isDigit(char c)
 {
 	return c >= '0' && c <= '9';
+}
+
+//Returns the number of words in string
+int Input::countWords(string str)
+{
+	int state = OUT;
+	int wordCounter = 0;
+	int length = str.length();
+
+	//Scan all characters one by one
+	for (int i = 0; i < length; i++)
+	{
+		//If next character is seperator, set the state as OUT
+		if (str[i] == ' ' || str[i] == '\t')
+		{
+			state = OUT;
+		}
+			//If next character is not a seperator and state is OUT,
+			//then set the state IN and increment word count
+		else if (state == OUT)
+		{
+			state = IN;
+			wordCounter++;
+		}
+	}
+
+	return wordCounter;
+}
+
+//remove all spaces from a given string
+void Input::removeSpaces(string& str)
+{
+	//To keep track of non-space character count
+	int count = 0;
+	int length = str.length();
+
+	//Traverse the given string. if current character is not space,
+	//then place it at index 'count++'
+	for (int i = 0; i < length; i++)
+	{
+		if (str[i] != ' ')
+		{
+			str[count++] = str[i];
+		}
+	}
+	str.resize(count);
 }

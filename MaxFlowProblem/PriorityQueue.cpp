@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------------------------//
+﻿
 #include "PriorityQueue.h"
 
 PriorityQueue::PriorityQueue(int max)
@@ -52,7 +52,7 @@ void PriorityQueue::fixPriorityQueue(int node)
 	int right = Right(node);
 
 	//Find maximum among node, left and right
-	if (left < _PriorityQueueSize && _data[left] > _data[node])
+	if (left < _PriorityQueueSize && _data[left].second > _data[node].second)
 	{
 		max = left;
 	}
@@ -60,7 +60,7 @@ void PriorityQueue::fixPriorityQueue(int node)
 	{
 		max = node;
 	}
-	if (right < _PriorityQueueSize && _data[right] > _data[max])
+	if (right < _PriorityQueueSize && _data[right].second > _data[max].second)
 	{
 		max = right;
 	}
@@ -108,7 +108,7 @@ void PriorityQueue::increaseKey(int node, int newData)
 	int i = _ptrArr[node]; //Extract node's location
 	_data[i].second = newData;
 	//The increased node will trickle up until the priority queue is fixed.
-	while ((i > 0) && (_data[Parent(i)] < _data[i]))
+	while ((i > 0) && (_data[Parent(i)].second < _data[i].second))
 	{
 		swapNodes(_data[i], _data[Parent(i)]);
 		i = Parent(i);
@@ -137,7 +137,7 @@ void PriorityQueue::insert(pair<int,int> item)
 
 	_data[i] = item;	//Insert item to most left leaf.
 	_ptrArr[item.first] = i;	//Update item's pointer.
-	while ((i > 0) && (_data[Parent(i)] < _data[i]))
+	while ((i > 0) && (_data[Parent(i)].second < _data[i].second))
 	{
 		swapNodes(_data[i], _data[Parent(i)]);
 		//_data[i] = _data[Parent(i)];
@@ -146,4 +146,4 @@ void PriorityQueue::insert(pair<int,int> item)
 	/*_data[i] = item;
 	_ptrArr[item.first] = i;*/
 }
-//-----------------------------------------------------------------------------------------------//
+
