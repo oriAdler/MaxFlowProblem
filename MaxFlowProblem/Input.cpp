@@ -52,7 +52,12 @@ DirectedGraph *Input::handleInput(int &s, int &t, char *fileName)
 		}
 	}
 	inFile.close();
-
+	//Check that the graph is a simple graph
+	if(!isSimpleGraph(*newGraph))
+	{
+		invalidInput(inFile);
+	}
+	
 	return newGraph;
 }
 
@@ -150,15 +155,15 @@ bool Input::isValidTrio(string str, int trio[], int numOfVertex)
 		//Extracting word by word from stream
 		currentLine >> tempNumber;
 		if(counter==2)	//Check capacity is valid
-		{
-			if (!isInteger(tempNumber) && isPositive(tempNumber))
+		{	
+			if (!isInteger(tempNumber) || !isPositive(tempNumber))
 			{
 				return false;
 			}
 		}
 		else	//Check is vertex is valid
 		{
-			if (!isInteger(tempNumber) && inRange(tempNumber, numOfVertex))
+			if (!isInteger(tempNumber) || !inRange(tempNumber, numOfVertex))
 			{
 				return false;
 			}
@@ -168,7 +173,7 @@ bool Input::isValidTrio(string str, int trio[], int numOfVertex)
 	return counter == 3 ? true : false;
 }
 
-bool Input::checkValidGraph(const DirectedGraph &G)
+bool Input::isSimpleGraph(const DirectedGraph &G)
 {
 	int size = G.getSize();
 	//Checks if self loop

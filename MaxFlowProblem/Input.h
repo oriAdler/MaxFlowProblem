@@ -24,7 +24,7 @@ private:
 	static int getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s));
 	static int getValidLine(ifstream& inFile, bool arg1(string s), bool arg2(string s, int n), int num);
 	static string getNextNonEmptyLine(ifstream& inFile);
-	static bool checkValidGraph(const DirectedGraph& G);
+	static bool isSimpleGraph(const DirectedGraph& G);
 	static bool isDigit(char c);
 	static int countWords(string str);
 	static void removeSpaces(string& str);
