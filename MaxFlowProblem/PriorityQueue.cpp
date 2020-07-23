@@ -1,6 +1,7 @@
 ﻿
 #include "PriorityQueue.h"
 
+//note: constructor overloading?
 PriorityQueue::PriorityQueue(int max)
 {
 	_data = new pair<int,int>[max];
@@ -14,8 +15,8 @@ PriorityQueue::PriorityQueue(pair<int,int> arr[], int n)
 {
 	_PriorityQueueSize = _MaxSize = n;
 
-	_data = arr;
-	_allocated = 0;
+	_data = arr;	//Assign array A to data pointer.
+	_allocated = 0;	//Memory not allocated by heap.
 	_ptrArr = new int[n];
 
 	//Init ptr array
