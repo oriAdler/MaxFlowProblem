@@ -10,12 +10,12 @@ LinkedList::~LinkedList()
 {
 	MakeEmpty();
 }
-
+//delete all nodes from list
 void LinkedList::MakeEmpty()
 {
 	while (!isEmpty())
 	{
-		Node* temp = head;
+		Node *temp = head;
 		head = head->next;
 		delete temp;
 	}
@@ -26,8 +26,8 @@ bool LinkedList::isEmpty() const
 {
 	return head == tail;
 }
-
-Node* LinkedList::first() const
+//this method returns pointer of the element from the head of the list
+Node *LinkedList::first() const
 {
 	if (isEmpty())
 	{
@@ -35,10 +35,10 @@ Node* LinkedList::first() const
 	}
 	return (head->next);
 }
-
+//this method appends element to the end of the list
 void LinkedList::Append(int item)
 {
-	Node* newNode = new Node(item);
+	Node *newNode = new Node(item);
 	tail->InsertAfter(newNode);
 	tail = newNode;
 }

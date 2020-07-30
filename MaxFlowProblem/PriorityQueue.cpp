@@ -1,31 +1,31 @@
 ﻿
 #include "PriorityQueue.h"
 
-//note: constructor overloading?
+//Constructor only receives size and allocated proper memory
 PriorityQueue::PriorityQueue(int max)
 {
-	_data = new pair<int,int>[max];
+	_data = new pair<int, int>[max];
 	_MaxSize = max;
 	_PriorityQueueSize = 0;
 	_allocated = 1;
 	_ptrArr = new int[max];
 }
-
-PriorityQueue::PriorityQueue(pair<int,int> arr[], int n)
+//Constructor receives array of pairs and creates sorted priority queue with updated ptr array(index in queue) to every object
+PriorityQueue::PriorityQueue(pair<int, int> arr[], int n)
 {
 	_PriorityQueueSize = _MaxSize = n;
 
 	_data = arr;	//Assign array A to data pointer.
-	_allocated = 0;	//Memory not allocated by heap.
+	_allocated = 0; //Memory not allocated by heap.
 	_ptrArr = new int[n];
 
 	//Init ptr array
-	for(int i=0; i<_MaxSize; i++)	//note: maxSize vs currentSize?
+	for (int i = 0; i < _MaxSize; i++) //note: maxSize vs currentSize?
 	{
 		_ptrArr[_data[i].first] = i;
 	}
 
-	for (int j = n / 2 - 1; j >= 0; j--)	// floyd algorithm.
+	for (int j = n / 2 - 1; j >= 0; j--) // floyd algorithm.
 	{
 		fixPriorityQueue(j);
 	}
@@ -68,33 +68,34 @@ void PriorityQueue::fixPriorityQueue(int node)
 	//Swap values if necessary and continue fixing the heap towards the leaves.
 	if (max != node)
 	{
-		swapNodes(_data[node], _data[max]);	
+		swapNodes(_data[node], _data[max]);
 		fixPriorityQueue(max);
 	}
 }
 
 PriorityQueue::~PriorityQueue()
 {
+	//check if array is allocated, if true delete
 	if (_allocated)
 	{
-		delete[]_data;
+		delete[] _data;
 	}
 	_data = nullptr;
-	delete[]_ptrArr;
+	delete[] _ptrArr;
 }
-
-pair<int,int> PriorityQueue::deleteMax()
+// this method will delete max item in priority queue and fix priority queue accordingly
+// complexity: O(log n) (fixPriorityQueue)
+pair<int, int> PriorityQueue::deleteMax()
 {
 	if (_PriorityQueueSize < 1)
 	{
 		cout << "Error: EMPTY Priority Queue\n";
 		exit(1);
 	}
-	pair<int,int> max = _data[0];
+	pair<int, int> max = _data[0];
 	_PriorityQueueSize--;
 	//Using swap in order to update pointers
 	swapNodes(_data[0], _data[_PriorityQueueSize]);
-	/*_data[0] = _data[_PriorityQueueSize];*/
 	fixPriorityQueue(0);
 	return max;
 }
@@ -103,6 +104,11 @@ bool PriorityQueue::isEmpty() const
 {
 	return !_PriorityQueueSize;
 }
+//this method recieves key number to update the key with new data
+//1. we find node location with index number and then we will increase key
+// complexity => O(1) (due to ptr array)
+//2. fix PriorityQueue accordingly
+// complexity => O(log n) (node change only travel up because key is increased)
 
 void PriorityQueue::increaseKey(int node, int newData)
 {
@@ -116,7 +122,7 @@ void PriorityQueue::increaseKey(int node, int newData)
 	}
 }
 
-pair<int,int> PriorityQueue::max()
+pair<int, int> PriorityQueue::max()
 {
 	if (_PriorityQueueSize < 1)
 	{
@@ -125,8 +131,9 @@ pair<int,int> PriorityQueue::max()
 	}
 	return _data[0];
 }
-
-void PriorityQueue::insert(pair<int,int> item)
+//insert into priority queue
+// complexity => O(log n)
+void PriorityQueue::insert(pair<int, int> item)
 {
 	if (_PriorityQueueSize == _MaxSize)
 	{
@@ -136,15 +143,13 @@ void PriorityQueue::insert(pair<int,int> item)
 	int i = _PriorityQueueSize;
 	_PriorityQueueSize++;
 
-	_data[i] = item;	//Insert item to most left leaf.
-	_ptrArr[item.first] = i;	//Update item's pointer.
+	_data[i] = item;		 //Insert item to most left leaf.
+	_ptrArr[item.first] = i; //Update item's pointer.
+
+	//trickle up tree
 	while ((i > 0) && (_data[Parent(i)].second < _data[i].second))
 	{
 		swapNodes(_data[i], _data[Parent(i)]);
-		//_data[i] = _data[Parent(i)];
 		i = Parent(i);
 	}
-	/*_data[i] = item;
-	_ptrArr[item.first] = i;*/
 }
-

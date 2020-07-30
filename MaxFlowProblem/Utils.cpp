@@ -1,29 +1,31 @@
 ﻿#include "Utils.h"
+//this function will initialize key value pairs array for dijkstraVariationPath according to source s
 
-pair<int,int>* Utils::initializeSingleSource(DirectedGraph G, int s, int d[])
+pair<int, int> *Utils::initializeSingleSource(DirectedGraph G, int s, int d[])
 {
 	int numOfVertex = G.getSize();
-	pair<int,int>* arr = new pair<int,int>[numOfVertex];
+	//create new k,v pair array
+	pair<int, int> *arr = new pair<int, int>[numOfVertex];
 	// d[s] = 0, ∀ v≠s: d[v] = -∞
-	for(int i=0; i< numOfVertex; i++)
+	for (int i = 0; i < numOfVertex; i++)
 	{
-		if(i==s)
+		if (i == s)
 		{
-			d[i] = INT_MAX;	
+			d[i] = INT_MAX;
 		}
 		else
 		{
 			d[i] = INT_MIN;
 		}
-		arr[i] = pair<int,int>(i, d[i]);
+		arr[i] = pair<int, int>(i, d[i]);
 	}
-	
+
 	return arr;
 }
 
 //Returns true if there is a path from source 's' to sink 't' in graph G.
 //Also fills parent[] to store the path.
-bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int d[], int p[])
+bool Utils::BFSPath(const DirectedGraph &G, int s, int t, int d[], int p[])
 {
 	Queue Q;
 	int size = G.getSize();
@@ -40,10 +42,10 @@ bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int d[], int p[])
 	while (!Q.IsEmpty())
 	{
 		int u = Q.DeQueue();
-		LinkedList* adjList = G.GetAdjList(u);
-		Node* current = adjList->first();
-		//For each v IN Adj[u] do 
-		while(current)
+		LinkedList *adjList = G.GetAdjList(u);
+		Node *current = adjList->first();
+		//For each v IN Adj[u] do
+		while (current)
 		{
 			int v = current->data;
 			if (d[v] == INT_MAX)
@@ -56,19 +58,22 @@ bool Utils::BFSPath(const DirectedGraph& G, int s, int t, int d[], int p[])
 		}
 		delete adjList;
 	}
-	
+
 	return d[t] != INT_MAX ? true : false;
 }
 
-// note: explain changes in algorithm - documentation
-MinCut* Utils::fordFulkerson(const DirectedGraph& G, int s, int t,
-	bool PathFunc(const DirectedGraph& G, int s, int t, int d[], int p[]), int& numOfIterations)
+// this function will calculate Mincut maxflow for given flow network
+// this function will receives directedGraph, a function pointer for new path calculation for residual graph
+// source (s) and sink (t) and ref to num of iterations
+// does not contain flow matrix due to redundantancy
+MinCut *Utils::fordFulkerson(const DirectedGraph &G, int s, int t,
+							 bool PathFunc(const DirectedGraph &G, int s, int t, int d[], int p[]), int &numOfIterations)
 {
 	//Init
-	int u, v;
-	DirectedGraph Gf(G);	//The residual graph is equal to the original graph
-	int* d = new int[G.getSize()];
-	int* p = new int[G.getSize()];
+	int u, v, size = G.getSize();
+	DirectedGraph Gf(G); //The residual graph is equal to the original graph
+	int *d = new int[size];
+	int *p = new int[size];
 	int maxFlow = 0;
 
 	//Find better Path P from 's' to 't' via BFS
@@ -89,32 +94,38 @@ MinCut* Utils::fordFulkerson(const DirectedGraph& G, int s, int t,
 			Gf(u, v) -= pathFlow;
 			Gf(v, u) += pathFlow;
 		}
-		//cout << endl;
-		//Gf.Show();
+
 		maxFlow += pathFlow;
 	}
 
-	MinCut* res = new MinCut(d, G.getSize(), maxFlow, s);
-	delete []p;
-	delete []d;
+	MinCut *res = new MinCut(d, size, maxFlow, s);
+	delete[] p;
+	delete[] d;
 	return res;
 }
-
-bool Utils::dijkstraVariationPath(const DirectedGraph& G, int s, int t, int d[], int p[])
+// this function will calculate path s -> t in directed graph
+// this function receives directedGraph G, s, t, d array and p array
+// with return true if there is a path from s -> t
+// this is a greedy algorithim that find the path with the maximum capacity
+// this variation find a path with maximum residual capacity
+// Path weight = min edge capacity on path
+//Returns true if there is a path from source 's' to sink 't' in graph G.
+bool Utils::dijkstraVariationPath(const DirectedGraph &G, int s, int t, int d[], int p[])
 {
 	//Init
 	int numOfVertex = G.getSize();
-	pair<int, int>* arr = initializeSingleSource(G, s, d);
+	pair<int, int> *arr = initializeSingleSource(G, s, d);
 	PriorityQueue Q(arr, numOfVertex);
 
 	while (!Q.isEmpty())
 	{
 		int u = Q.deleteMax().first;
-		LinkedList* adjList = G.GetAdjList(u);
-		Node* current = adjList->first();
+		LinkedList *adjList = G.GetAdjList(u);
+		Node *current = adjList->first();
 		//For each v IN Adj[u] do
-		while(current)
+		while (current)
 		{
+			//calculate min capacity
 			int v = current->data;
 			int min = d[u] < G(u, v) ? d[u] : G(u, v);
 			if (min > d[v])
@@ -128,6 +139,6 @@ bool Utils::dijkstraVariationPath(const DirectedGraph& G, int s, int t, int d[],
 		delete adjList;
 	}
 
-	delete[]arr;
+	delete[] arr;
 	return d[t] != INT_MIN ? true : false;
 }
