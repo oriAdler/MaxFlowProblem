@@ -66,7 +66,7 @@ bool Utils::BFSPath(const DirectedGraph &G, int s, int t, int d[], int p[])
 // this function will receives directedGraph, a function pointer for new path calculation for residual graph
 // source (s) and sink (t) and ref to num of iterations
 // does not contain flow matrix due to redundantancy
-MinCut *Utils::fordFulkerson(const DirectedGraph &G, int s, int t,
+MinCutMaxFlow *Utils::fordFulkerson(const DirectedGraph &G, int s, int t,
 							 bool PathFunc(const DirectedGraph &G, int s, int t, int d[], int p[]), int &numOfIterations)
 {
 	//Init
@@ -98,7 +98,7 @@ MinCut *Utils::fordFulkerson(const DirectedGraph &G, int s, int t,
 		maxFlow += pathFlow;
 	}
 
-	MinCut *res = new MinCut(d, size, maxFlow, s);
+	MinCutMaxFlow *res = new MinCutMaxFlow(d, size, maxFlow, s);
 	delete[] p;
 	delete[] d;
 	return res;

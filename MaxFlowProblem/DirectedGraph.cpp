@@ -1,11 +1,11 @@
 ﻿#include "DirectedGraph.h"
 
-//ctor
+//ctor (MakeEmptyGraph initializes _AdjacencyMatrix and _size)
 DirectedGraph::DirectedGraph(int n)
 {
 	MakeEmptyGraph(n);
 }
-//copy ctor
+//copy ctor (MakeEmptyGraph initializes _AdjacencyMatrix and _size)
 DirectedGraph::DirectedGraph(const DirectedGraph &other)
 {
 	this->MakeEmptyGraph(other._size);

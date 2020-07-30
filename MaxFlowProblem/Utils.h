@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 #include "DirectedGraph.h"
-#include "MinCut.h"
+#include "MinCutMaxFlow.h"
 #include "Queue.h"
 #include "PriorityQueue.h"
 
@@ -21,7 +21,7 @@ private:
 
 public:
 	static bool BFSPath(const DirectedGraph &G, int s, int t, int d[], int p[]);
-	static MinCut *fordFulkerson(const DirectedGraph &G, int s, int t,
+	static MinCutMaxFlow *fordFulkerson(const DirectedGraph &G, int s, int t,
 								 bool PathFunc(const DirectedGraph &G, int s, int t, int d[], int p[]), int &numOfIterations);
 	static bool dijkstraVariationPath(const DirectedGraph &G, int s, int t, int d[], int p[]);
 };

@@ -155,7 +155,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="MaxFlowProblem.cpp" />
-    <ClCompile Include="MinCut.cpp" />
+    <ClCompile Include="MinCutMaxFlow.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="PriorityQueue.cpp" />
     <ClCompile Include="Queue.cpp" />
@@ -165,7 +165,7 @@
     <ClInclude Include="DirectedGraph.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LinkedList.h" />
-    <ClInclude Include="MinCut.h" />
+    <ClInclude Include="MinCutMaxFlow.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="PriorityQueue.h" />
     <ClInclude Include="Queue.h" />

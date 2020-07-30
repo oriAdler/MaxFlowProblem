@@ -1,9 +1,9 @@
-﻿#include "MinCut.h"
+﻿#include "MinCutMaxFlow.h"
 
 //Constructor
 // will receive final d array, array size, max flow and source
 // finds S,T cuts using the array.
-MinCut::MinCut(int arr[], int size, int max, int s)
+MinCutMaxFlow::MinCutMaxFlow(int arr[], int size, int max, int s)
 {
 	_maxFlow = max;
 	for (int i = 0; i < size; i++)
@@ -20,7 +20,7 @@ MinCut::MinCut(int arr[], int size, int max, int s)
 	}
 }
 //Prints to console
-void MinCut::Show()
+void MinCutMaxFlow::Show()
 {
 	cout << "Max flow = " << _maxFlow << endl;
 	cout << "Min cut: S = ";

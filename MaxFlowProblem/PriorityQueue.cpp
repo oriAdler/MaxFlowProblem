@@ -20,7 +20,7 @@ PriorityQueue::PriorityQueue(pair<int, int> arr[], int n)
 	_ptrArr = new int[n];
 
 	//Init ptr array
-	for (int i = 0; i < _MaxSize; i++) //note: maxSize vs currentSize?
+	for (int i = 0; i < _MaxSize; i++) 
 	{
 		_ptrArr[_data[i].first] = i;
 	}
